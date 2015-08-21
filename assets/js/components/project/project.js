@@ -7,11 +7,13 @@ var Project = React.createClass({
 
   render: function() {
 
+    var project = this.props.project;
+
     return (
-      <article key="">
-        <ProjectHeader />
+      <article>
+        <ProjectHeader project={project} />
         <ProjectBar />
-        <ProjectTaskList />
+        <ProjectTaskList tasks={project.tasks} />
       </article>
     );
   }
