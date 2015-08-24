@@ -39,6 +39,10 @@ body {
 .content {
   width: $content-width;
   margin: 60px auto;
+
+  .text-center {
+    text-align: center;
+  }
 }
 
 article {

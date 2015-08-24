@@ -1,4 +1,4 @@
-var routes = {
+var Routes = {
   host: 'https://rails-api-todo-app.herokuapp.com/api',
 
   projectsIndex: function() {
@@ -33,3 +33,5 @@ var routes = {
     return this.host + '/projects/' + project_id + '/tasks/' + id + '/complete';
   }
 };
+
+export default Routes;

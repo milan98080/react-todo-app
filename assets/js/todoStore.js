@@ -1,3 +1,5 @@
+var Routes = require('./routes');
+
 var TodoStore = {
   _state: {
     todo: [],
@@ -9,7 +11,7 @@ var TodoStore = {
 
   loadProject: function() {
     var obj = this;
-    $.getJSON(routes.projectsIndex(), function(data) {
+    $.getJSON(Routes.projectsIndex(), function(data) {
       obj._state.todo = data;
       obj.onChange();
     });
@@ -25,7 +27,7 @@ var TodoStore = {
     this.onChange();
 
     $.ajax({
-      url: routes.projectsDestroy(project.id),
+      url: Routes.projectsDestroy(project.id),
       dataType: 'json',
       cache: false,
       method: 'DELETE',
@@ -47,7 +49,7 @@ var TodoStore = {
     this.onChange();
 
     $.ajax({
-      url: routes.tasksDestory(project.id, task.id),
+      url: Routes.tasksDestory(project.id, task.id),
       dataType: 'json',
       cache: false,
       method: 'DELETE',
@@ -60,7 +62,7 @@ var TodoStore = {
     var description = taskInput.value;
     var obj = this;
     if (!description) { return false; }
-    $.post(routes.tasksCreate(project.id), { task: { description: description } }, function(data) {
+    $.post(Routes.tasksCreate(project.id), { task: { description: description } }, function(data) {
       var todo = obj.getState().todo.map(function(projectItem) {
         if (projectItem.id === project.id) {
           projectItem.tasks.push({
@@ -79,9 +81,21 @@ var TodoStore = {
     });
   },
 
+  completeTask: function(project, task, complete) {
+    $.ajax({
+      url: Routes.tasksComplete(project.id, task.id),
+      dataType: 'json',
+      cache: false,
+      method: 'PUT',
+      data: { task: { complete: complete } },
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
+    });
+  },
+
   createProject: function() {
     var obj = this;
-    $.post(routes.projectsCreate(), function(data) {
+    $.post(Routes.projectsCreate(), function(data) {
       var todo = obj.getState().todo;
       todo.push({
         id: data.id,
@@ -94,3 +108,5 @@ var TodoStore = {
     });
   }
 };
+
+export default TodoStore;

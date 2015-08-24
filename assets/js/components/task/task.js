@@ -1,4 +1,6 @@
 var React = require('react');
+var TodoAction = require('../../todoAction');
+var Routes = require('../../routes');
 
 var Task = React.createClass({
 
@@ -15,18 +17,10 @@ var Task = React.createClass({
   },
 
   onCompleteTask: function(event) {
-    var projectId = this.props.project.id;
-    var taskId = this.getTask().id;
+    var project = this.props.project;
+    var task = this.getTask();
     var complete = event.target.checked;
-    $.ajax({
-      url: routes.tasksComplete(projectId, taskId),
-      dataType: 'json',
-      cache: false,
-      method: 'PUT',
-      data: { task: { complete: complete } },
-      success: function(data) {}.bind(this),
-      error: function(xhr, status, err) {}.bind(this)
-    });
+    TodoAction.completeTask(project, task, complete);
   },
 
   render: function() {

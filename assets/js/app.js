@@ -1,6 +1,7 @@
 var React = require('react');
 var AppHeader = require('./components/app/header');
 var AppContent = require('./components/app/content');
+var TodoStore = require('./todoStore');
 
 var TodoApp = React.createClass({
 
@@ -32,4 +33,4 @@ var TodoApp = React.createClass({
   }
 });
 
-React.render(<TodoApp />, document.body);
+React.render(<TodoApp />, document.getElementById('container'));

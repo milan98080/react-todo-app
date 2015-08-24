@@ -1,5 +1,6 @@
 var React = require('react');
 var Project = require('./project');
+var LoadIndicator = require('../loader');
 
 var ProjectList = React.createClass({
 
@@ -9,11 +10,17 @@ var ProjectList = React.createClass({
       return <Project project={project} key={project.id} />
     });
 
-    return (
-      <section className="list">
-        {projects}
-      </section>
-    );
+    if (projects.length > 0) {
+      return (
+        <section className="list">
+          {projects}
+        </section>
+      );
+    } else {
+      return (
+        <LoadIndicator />
+      );
+    }
   }
 });
 
