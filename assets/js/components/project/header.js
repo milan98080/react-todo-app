@@ -2,6 +2,13 @@ var React = require('react');
 
 var ProjectHeader = React.createClass({
 
+  getInitialState: function() {
+    return {
+      editMode: false,
+      title: this.props.project.title,
+    };
+  },
+
   getProject: function() {
     return this.props.project;
   },
@@ -14,22 +21,49 @@ var ProjectHeader = React.createClass({
     }
   },
 
+  onEditProject: function(event) {
+    event.preventDefault();
+    this.setState({ editMode: !this.state.editMode }, function() {
+      if (this.state.editMode === true) {
+        React.findDOMNode(this.refs.input).focus();
+      }
+    });
+  },
+
+  onEditTitle: function(event) {
+    if (event.keyCode === 13) {
+      this.setState({
+        editMode: false,
+        title: event.target.value,
+      }, function() {
+        $.ajax({
+          url: routes.projectsPut(this.getProject().id),
+          dataType: 'json',
+          cache: false,
+          method: 'PUT',
+          data: { project: { title: this.state.title } },
+          success: function(data) {}.bind(this),
+          error: function(xhr, status, err) {}.bind(this)
+        });
+      });
+    }
+  },
+
   render: function() {
-
     var project = this.getProject();
-
+    var editModeClass = this.state.editMode ? ' edit-mode' : '';
     return (
-      <div className='todo-header'>
-        <h3>{project.title}</h3>
+      <div className={'todo-header' + editModeClass}>
+        <h3>{this.state.title}</h3>
         <ul>
           <li>
-            <a className='todo-action-edit' href='#' title='Edit'>Edit</a>
+            <a className='todo-action-edit' href='#' title='Edit' onClick={this.onEditProject}>Edit</a>
           </li>
           <li>
             <a className='todo-action-remove' href='#' title='Delete' onClick={this.onDeleteProject}>Delete</a>
           </li>
         </ul>
-        <input name='' type='text' />
+        <input ref='input' name='' type='text' defaultValue={this.state.title} onKeyDown={this.onEditTitle} />
       </div>
     );
   }

@@ -1,50 +1,18 @@
-var todo = [
-  {
-    id: 1,
-    title: 'Project 1',
-    tasks: [
-      {
-        id: 1,
-        description: 'Project 1 Task 1',
-        completed: true
-      },
-      {
-        id: 2,
-        description: 'Project 1 Task 2',
-        completed: false
-      }
-    ],
-  },
-  {
-    id: 2,
-    title: 'Project 2',
-    tasks: [
-      {
-        id: 3,
-        description: 'Project 2 Task 1',
-        completed: false
-      },
-      {
-        id: 4,
-        description: 'Project 2 Task 2',
-        completed: true
-      }
-    ],
-  },
-  {
-    id: 3,
-    title: 'Project 3',
-    tasks: [],
-  },
-];
-
 var TodoStore = {
   _state: {
-    todo: todo,
+    todo: [],
   },
 
   getState: function() {
     return this._state;
+  },
+
+  loadProject: function() {
+    var obj = this;
+    $.getJSON(routes.projectsIndex(), function(data) {
+      obj._state.todo = data;
+      obj.onChange();
+    });
   },
 
   onChange: function() {},
@@ -55,24 +23,74 @@ var TodoStore = {
     });
     this._state.todo = todo;
     this.onChange();
+
+    $.ajax({
+      url: routes.projectsDestroy(project.id),
+      dataType: 'json',
+      cache: false,
+      method: 'DELETE',
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
+    });
   },
 
+  deleteTask: function(project, task) {
+    var todo = this.getState().todo.map(function(project) {
+      var tasks = project.tasks.filter(function(taskItem) {
+        return taskItem.id !== task.id;
+      });
+      project.tasks = tasks;
+      return project;
+    });
 
-  deleteTask: function(task) {
-    var todo = this.getState().todo.forEach()
-
-    // var todo = this.getState().todo.filter(function(item) {
-    //   var flag = true;
-    //   item.tasks.forEach(function(elem){
-    //     if (elem.id === task.id) {
-    //       flag = false;
-    //       return;
-    //     }
-    //   });
-
-    //   return flag;
-    // });
     this._state.todo = todo;
     this.onChange();
+
+    $.ajax({
+      url: routes.tasksDestory(project.id, task.id),
+      dataType: 'json',
+      cache: false,
+      method: 'DELETE',
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
+    });
+  },
+
+  createTask: function(project, taskInput) {
+    var description = taskInput.value;
+    var obj = this;
+    if (!description) { return false; }
+    $.post(routes.tasksCreate(project.id), { task: { description: description } }, function(data) {
+      var todo = obj.getState().todo.map(function(projectItem) {
+        if (projectItem.id === project.id) {
+          projectItem.tasks.push({
+            id: data.id,
+            description: data.description,
+            completed: data.completed
+          });
+        }
+        return projectItem;
+      });
+
+      obj._state.todo = todo;
+      obj.onChange();
+
+      taskInput.value = '';
+    });
+  },
+
+  createProject: function() {
+    var obj = this;
+    $.post(routes.projectsCreate(), function(data) {
+      var todo = obj.getState().todo;
+      todo.push({
+        id: data.id,
+        title: data.title,
+        tasks: data.tasks,
+      });
+
+      obj._state.todo = todo;
+      obj.onChange();
+    });
   }
 };

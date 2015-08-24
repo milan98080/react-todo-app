@@ -12,8 +12,8 @@ var Project = React.createClass({
     return (
       <article>
         <ProjectHeader project={project} />
-        <ProjectBar />
-        <ProjectTaskList tasks={project.tasks} />
+        <ProjectBar project={project} />
+        <ProjectTaskList project={project} tasks={project.tasks} />
       </article>
     );
   }

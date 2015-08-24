@@ -4,14 +4,6 @@ var TodoButton = require('../button');
 
 var AppContent = React.createClass({
 
-  // getInitialState: function() {
-  //   return {todo: todo}
-  // },
-
-  // handleProjectDelete: function() {
-  //   alert(12);
-  // },
-
   render: function() {
 
     return (

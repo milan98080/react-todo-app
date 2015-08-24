@@ -10,8 +10,23 @@ var Task = React.createClass({
     event.preventDefault();
 
     if (confirm('Are you sure ?')) {
-      TodoAction.deleteTask(this.getTask());
+      TodoAction.deleteTask(this.props.project, this.getTask());
     }
+  },
+
+  onCompleteTask: function(event) {
+    var projectId = this.props.project.id;
+    var taskId = this.getTask().id;
+    var complete = event.target.checked;
+    $.ajax({
+      url: routes.tasksComplete(projectId, taskId),
+      dataType: 'json',
+      cache: false,
+      method: 'PUT',
+      data: { task: { complete: complete } },
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
+    });
   },
 
   render: function() {
@@ -23,7 +38,7 @@ var Task = React.createClass({
 
       <tr className='completed-task'>
         <td className='todo-list-checkbox'>
-          <input defaultChecked={completed} type='checkbox' />
+          <input defaultChecked={completed} type='checkbox' onChange={this.onCompleteTask} />
         </td>
         <td className='todo-list-divider'>&nbsp;</td>
         <td className='todo-list-task'>
