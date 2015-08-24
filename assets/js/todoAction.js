@@ -17,8 +17,16 @@ var TodoAction = {
     TodoStore.completeTask(project, task, complete);
   },
 
+  editTask: function(project, task, description) {
+    TodoStore.editTask(project, task, description);
+  },
+
   createProject: function() {
     TodoStore.createProject();
+  },
+
+  editProject: function(project, title) {
+    TodoStore.editProject(project, title);
   }
 };
 

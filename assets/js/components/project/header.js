@@ -37,15 +37,9 @@ var ProjectHeader = React.createClass({
         editMode: false,
         title: event.target.value,
       }, function() {
-        $.ajax({
-          url: routes.projectsPut(this.getProject().id),
-          dataType: 'json',
-          cache: false,
-          method: 'PUT',
-          data: { project: { title: this.state.title } },
-          success: function(data) {}.bind(this),
-          error: function(xhr, status, err) {}.bind(this)
-        });
+        var project = this.getProject();
+        var title = this.state.title;
+        TodoAction.editProject(project, title);
       });
     }
   },

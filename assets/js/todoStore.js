@@ -93,6 +93,18 @@ var TodoStore = {
     });
   },
 
+  editTask: function(project, task, description) {
+    $.ajax({
+      url: Routes.tasksPut(project.id, task.id),
+      dataType: 'json',
+      cache: false,
+      method: 'PUT',
+      data: { task: { description: description } },
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
+    });
+  },
+
   createProject: function() {
     var obj = this;
     $.post(Routes.projectsCreate(), function(data) {
@@ -105,6 +117,18 @@ var TodoStore = {
 
       obj._state.todo = todo;
       obj.onChange();
+    });
+  },
+
+  editProject: function(project, title) {
+    $.ajax({
+      url: Routes.projectsPut(project.id),
+      dataType: 'json',
+      cache: false,
+      method: 'PUT',
+      data: { project: { title: title } },
+      success: function(data) {}.bind(this),
+      error: function(xhr, status, err) {}.bind(this)
     });
   }
 };
