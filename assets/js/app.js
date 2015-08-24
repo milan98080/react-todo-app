@@ -15,7 +15,7 @@ var TodoApp = React.createClass({
 
   componentDidMount: function() {
     TodoStore.onChange = this.onChange;
-    // TodoStore.loadProject();
+    TodoStore.loadProject();
   },
 
   onChange: function() {
