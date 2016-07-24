@@ -1,4 +1,4 @@
-# Interface for Todo app API
+# Interface for Todo app API build with React
 
 Demo project to play with React. Rails Todo app API project is used as a backend.
 
